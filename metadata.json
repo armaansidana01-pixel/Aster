@@ -1,0 +1,6 @@
+{
+  "name": "Aster — SAT Studio",
+  "description": "Full-stack Digital SAT preparation studio with College Board Question Bank integration, Bluebook exam emulation, Bayesian IRT diagnostics, and an AI tutor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

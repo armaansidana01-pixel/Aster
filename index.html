@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Aster — SAT Studio</title>
+    <meta name="description" content="Full-stack Digital SAT preparation studio with College Board Question Bank integration, Bluebook exam emulation, Bayesian IRT diagnostics, and an AI tutor." />
+    <meta name="theme-color" content="#1B3152" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Aster SAT" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta property="og:title" content="Aster — SAT Studio" />
+    <meta property="og:description" content="Full-stack Digital SAT preparation studio with College Board Question Bank integration, Bluebook exam emulation, Bayesian IRT diagnostics, and an AI tutor." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      // Per AI Studio runtime constraints: HMR is disabled in preview iframe; ignore Vite WebSocket reconnection rejections
+      window.addEventListener('unhandledrejection', function (event) {
+        var reason = event && event.reason;
+        var msg = (reason && (reason.message || reason.stack || String(reason))) || '';
+        if (
+          msg.includes('WebSocket') ||
+          msg.includes('vite:ws') ||
+          msg.includes('closed without opened') ||
+          msg.includes('@vite/client')
+        ) {
+          event.preventDefault();
+          if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+        }
+      });
+      window.onunhandledrejection = function (event) {
+        var reason = event && event.reason;
+        var msg = (reason && (reason.message || reason.stack || String(reason))) || '';
+        if (
+          msg.includes('WebSocket') ||
+          msg.includes('vite:ws') ||
+          msg.includes('closed without opened') ||
+          msg.includes('@vite/client')
+        ) {
+          if (event && event.preventDefault) event.preventDefault();
+          return true;
+        }
+      };
+      window.addEventListener('error', function (event) {
+        var msg = (event && (event.message || '')) || '';
+        if (
+          msg.includes('WebSocket') ||
+          msg.includes('vite:ws') ||
+          msg.includes('closed without opened') ||
+          msg.includes('@vite/client')
+        ) {
+          event.preventDefault();
+          if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+        }
+      });
+      window.onerror = function (msg, url, line, col, error) {
+        var str = String(msg || '') + ' ' + String(url || '') + ' ' + (error ? String(error.message || error.stack || '') : '');
+        if (
+          str.includes('WebSocket') ||
+          str.includes('vite:ws') ||
+          str.includes('closed without opened') ||
+          str.includes('@vite/client')
+        ) {
+          return true;
+        }
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap" rel="stylesheet" />
+    <script src="https://www.desmos.com/api/v1.9/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6" async></script>
+  </head>
+  <body class="bg-[#F5EFE6] text-[#1C1814] antialiased selection:bg-[#1B3152]/20">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidUserWorkspace(data) {
+      return data.keys().hasAll(['ownerId', 'displayName', 'targetScore', 'studyGoal', 'theme', 'payloadJson', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['ownerId', 'displayName', 'targetScore', 'studyGoal', 'theme', 'payloadJson', 'createdAt', 'updatedAt'])
+        && data.ownerId is string && data.ownerId.size() >= 1 && data.ownerId.size() <= 128 && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.ownerId == request.auth.uid
+        && data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 80
+        && data.targetScore is number && data.targetScore >= 400 && data.targetScore <= 1600
+        && data.studyGoal is string && data.studyGoal.size() >= 1 && data.studyGoal.size() <= 64
+        && data.theme is string && data.theme.size() <= 10 && (data.theme == 'dark' || data.theme == 'light')
+        && data.payloadJson is string && data.payloadJson.size() >= 2 && data.payloadJson.size() <= 400000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    match /workspaces/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+
+      allow create: if isVerified()
+        && isOwner(userId)
+        && isValidId(userId)
+        && isValidUserWorkspace(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isVerified()
+        && isOwner(userId)
+        && isValidId(userId)
+        && isValidUserWorkspace(incoming())
+        && incoming().ownerId == existing().ownerId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'targetScore', 'studyGoal', 'theme', 'payloadJson', 'updatedAt']);
+
+      allow delete: if isVerified()
+        && isOwner(userId)
+        && isValidId(userId);
+    }
+  }
+}

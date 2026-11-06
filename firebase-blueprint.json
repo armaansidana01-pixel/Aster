@@ -1,0 +1,62 @@
+{
+  "entities": {
+    "UserWorkspace": {
+      "title": "UserWorkspace",
+      "description": "Stores a user's non-PII SAT studio workspace state, onboarding goals, diagnostic weights,starred questions, and serialized session summaries.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the workspace owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Student display name entered during onboarding.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "targetScore": {
+          "type": "number",
+          "description": "Intended total SAT score between 400 and 1600."
+        },
+        "studyGoal": {
+          "type": "string",
+          "description": "Selected personalized study goal identifier.",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "theme": {
+          "type": "string",
+          "description": "Selected UI theme ('dark' or 'light').",
+          "enum": ["dark", "light"]
+        },
+        "payloadJson": {
+          "type": "string",
+          "description": "Bounded workspace state snapshot (sessions, attempts, imported reports, weights, starred questions).",
+          "minLength": 2,
+          "maxLength": 400000
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when workspace was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when workspace was last updated."
+        }
+      },
+      "required": ["ownerId", "displayName", "targetScore", "studyGoal", "theme", "payloadJson", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/workspaces/{userId}": {
+      "schema": "UserWorkspace",
+      "description": "Per-user SAT Studio workspace document keyed by the user's Auth UID."
+    }
+  }
+}
